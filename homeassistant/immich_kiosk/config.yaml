@@ -5,8 +5,8 @@ name: Immich Kiosk
 version: "0.47.0"
 slug: immich_kiosk
 description: Slideshows of your Immich photos for browsers and displays
-url: https://github.com/your-github-username/immich-kiosk
-image: ghcr.io/your-github-username/immich-kiosk
+url: https://github.com/Haydon94/homeassistant-immich-kiosk
+image: ghcr.io/haydon94/immich-kiosk
 arch:
   - amd64
   - aarch64
