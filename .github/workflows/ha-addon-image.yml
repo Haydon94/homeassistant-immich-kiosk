@@ -1,12 +1,19 @@
 name: Build Home Assistant add-on image
 
-# Runs when the add-on version is bumped on main, or manually from the Actions tab.
+# Runs when the add-on version is bumped on main, manually from the Actions tab,
+# or from sync-upstream.yml after it merges a new upstream release.
 on:
   push:
     branches: [main]
     paths:
       - homeassistant/immich_kiosk/config.yaml
   workflow_dispatch:
+  workflow_call:
+    inputs:
+      ref:
+        description: Branch or commit to build
+        type: string
+        default: main
 
 permissions:
   contents: read
@@ -18,6 +25,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.ref || github.ref }}
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
@@ -45,13 +54,8 @@ jobs:
           echo "VERSION=$VERSION" >> "$GITHUB_ENV"
           echo "IMAGE=$IMAGE" >> "$GITHUB_ENV"
 
+      # Compiles Kiosk with the root Dockerfile, then adds the HA wrapper on top.
       - name: Build and push image
-        run: |
-          docker buildx build \
-            --build-arg VERSION="$VERSION" \
-            --platform linux/amd64,linux/arm64 \
-            --label "org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}" \
-            --label "org.opencontainers.image.version=$VERSION" \
-            -t "$IMAGE:$VERSION" \
-            -t "$IMAGE:latest" \
-            --push .
+        env:
+          SOURCE: ${{ github.server_url }}/${{ github.repository }}
+        run: docker buildx bake -f homeassistant/immich_kiosk/docker-bake.hcl --push addon

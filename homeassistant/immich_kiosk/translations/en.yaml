@@ -1,0 +1,72 @@
+configuration:
+  immich_url:
+    name: Immich URL
+    description: Address of your Immich server as the add-on sees it, e.g. http://192.168.1.10:2283 (not localhost).
+  immich_api_key:
+    name: Immich API key
+    description: Create one in Immich under Account Settings → API Keys.
+  immich_external_url:
+    name: Immich external URL
+    description: Public Immich address used for links and QR codes, if different from the URL above.
+  password:
+    name: Kiosk password
+    description: If set, the kiosk page asks for this password.
+  albums:
+    name: Albums
+    description: Album IDs to show (from the album's URL in Immich). Leave empty for random photos.
+  people:
+    name: People
+    description: Person IDs to show (from the person's URL in Immich).
+  album_order:
+    name: Album order
+  duration:
+    name: Slide duration
+    description: Seconds each photo is shown.
+  transition:
+    name: Transition
+  layout:
+    name: Layout
+  image_fit:
+    name: Image fit
+  image_effect:
+    name: Image effect
+  show_progress_bar:
+    name: Show progress bar
+  show_time:
+    name: Show clock
+  time_format:
+    name: Clock format
+    description: 12 or 24 hour.
+  show_date:
+    name: Show date
+  date_format:
+    name: Date format
+    description: e.g. DD/MM/YYYY
+  show_image_date:
+    name: Show photo date
+  show_image_location:
+    name: Show photo location
+  show_album_name:
+    name: Show album name
+  show_person_name:
+    name: Show person names
+  show_videos:
+    name: Show videos
+  theme:
+    name: Theme
+  background_blur:
+    name: Blurred background
+    description: Fill empty space around photos with a blurred copy.
+  hide_cursor:
+    name: Hide mouse cursor
+  disable_screensaver:
+    name: Keep screen awake
+    description: Ask the browser to stop the screen dimming or locking.
+  sleep_start:
+    name: Sleep start
+    description: Time to blank the kiosk, e.g. 22 or 22:30.
+  sleep_end:
+    name: Sleep end
+    description: Time to wake the kiosk, e.g. 7 or 07:00.
+network:
+  3000/tcp: Kiosk web page

@@ -1,8 +1,10 @@
 # Home Assistant add-on (app) definition for Immich Kiosk.
 # Bumping "version" and pushing to main makes GitHub build a new image
 # (see .github/workflows/ha-addon-image.yml) and HAOS then offers the update.
+# The daily sync workflow sets this to each new upstream release. For fork-only
+# changes use a 4th number (e.g. 0.47.0.1) so HA sees it as newer.
 name: Immich Kiosk
-version: "0.47.0"
+version: "0.47.0.1"
 slug: immich_kiosk
 description: Slideshows of your Immich photos for browsers and displays
 url: https://github.com/Haydon94/homeassistant-immich-kiosk
@@ -23,3 +25,62 @@ map:
   - type: app_config
     path: /config
     read_only: false
+
+# Configuration tab. Each option becomes a KIOSK_<NAME> environment variable
+# (see run.sh), which takes priority over config.yaml. Defaults match Kiosk's.
+options:
+  immich_url: ""
+  immich_api_key: ""
+  albums: []
+  people: []
+  album_order: random
+  duration: 60
+  transition: none
+  layout: single
+  image_fit: contain
+  image_effect: none
+  show_progress_bar: false
+  show_time: false
+  time_format: "24"
+  show_date: false
+  date_format: DD/MM/YYYY
+  show_image_date: false
+  show_image_location: false
+  show_album_name: false
+  show_person_name: false
+  show_videos: false
+  theme: fade
+  background_blur: true
+  hide_cursor: false
+  disable_screensaver: false
+schema:
+  immich_url: url
+  immich_api_key: password
+  immich_external_url: url?
+  password: password?
+  albums:
+    - str
+  people:
+    - str
+  album_order: list(random|newest|oldest)
+  duration: int(1,)
+  transition: list(none|fade|cross-fade|slide|push)
+  layout: list(single|splitview|splitview-landscape|portrait|landscape)
+  image_fit: list(contain|cover|none)
+  image_effect: list(none|zoom|smart-zoom)
+  show_progress_bar: bool
+  show_time: bool
+  time_format: list(12|24)
+  show_date: bool
+  date_format: str
+  show_image_date: bool
+  show_image_location: bool
+  show_album_name: bool
+  show_person_name: bool
+  show_videos: bool
+  theme: list(fade|solid)
+  background_blur: bool
+  hide_cursor: bool
+  disable_screensaver: bool
+  sleep_start: str?
+  sleep_end: str?

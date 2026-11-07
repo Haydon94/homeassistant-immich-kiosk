@@ -1,0 +1,63 @@
+name: Sync with upstream Immich Kiosk
+
+# Once a day, checks for a new Immich Kiosk release. If there is one, merges that
+# release into main, sets the add-on version to match, and builds the image so
+# Home Assistant offers the update. Unreleased upstream work is never pulled in.
+#
+# Optional secret SYNC_TOKEN: a fine-grained token for this repo with
+# Contents + Workflows read/write. Without it, syncing fails whenever upstream
+# changes its own .github/workflows files (GitHub blocks that for the default token).
+on:
+  schedule:
+    - cron: "23 5 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  packages: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    outputs:
+      updated: ${{ steps.sync.outputs.updated }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.SYNC_TOKEN || github.token }}
+
+      - name: Merge latest upstream release
+        id: sync
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          CONFIG=homeassistant/immich_kiosk/config.yaml
+          TAG=$(gh release view --repo damongolding/immich-kiosk --json tagName -q .tagName)
+          UPSTREAM=${TAG#v}
+          CURRENT=$(sed -nE 's/^version:[[:space:]]*"?([^"]+)"?[[:space:]]*$/\1/p' "$CONFIG")
+
+          # Compare only the first three numbers, so fork revisions like 0.47.0.1 count as 0.47.0.
+          if [ "$(echo "$CURRENT" | cut -d. -f1-3)" = "$UPSTREAM" ]; then
+            echo "Already on upstream $UPSTREAM (add-on version $CURRENT)."
+            echo "updated=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git fetch --no-tags https://github.com/damongolding/immich-kiosk.git "+refs/tags/$TAG:refs/tags/$TAG"
+          git merge --no-edit -m "Merge upstream $TAG" "$TAG"
+          sed -i -E "s/^version:.*/version: \"$UPSTREAM\"/" "$CONFIG"
+          # [skip ci] stops this push re-running the build (the build job below does it).
+          git commit -am "Update add-on to Immich Kiosk $UPSTREAM [skip ci]"
+          git push origin HEAD:main
+          echo "updated=true" >> "$GITHUB_OUTPUT"
+
+  build:
+    needs: sync
+    if: needs.sync.outputs.updated == 'true'
+    uses: ./.github/workflows/ha-addon-image.yml
+    with:
+      ref: main
