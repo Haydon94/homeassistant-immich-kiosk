@@ -1,0 +1,25 @@
+# Home Assistant add-on (app) definition for Immich Kiosk.
+# Bumping "version" and pushing to main makes GitHub build a new image
+# (see .github/workflows/ha-addon-image.yml) and HAOS then offers the update.
+name: Immich Kiosk
+version: "0.47.0"
+slug: immich_kiosk
+description: Slideshows of your Immich photos for browsers and displays
+url: https://github.com/your-github-username/immich-kiosk
+image: ghcr.io/your-github-username/immich-kiosk
+arch:
+  - amd64
+  - aarch64
+startup: application
+boot: auto
+ports:
+  3000/tcp: 3000
+ports_description:
+  3000/tcp: Kiosk web page
+webui: "http://[HOST]:[PORT:3000]"
+map:
+  # The add-on's own config folder (<prefix>_immich_kiosk under app_configs /
+  # addon_configs) -> /config in the container, where Kiosk looks for config.yaml.
+  - type: app_config
+    path: /config
+    read_only: false
