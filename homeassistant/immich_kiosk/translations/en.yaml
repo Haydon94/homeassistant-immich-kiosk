@@ -24,12 +24,27 @@ configuration:
     description: Seconds each photo is shown.
   transition:
     name: Transition
+  fade_transition_duration:
+    name: Fade transition length
+    description: Seconds, used when Transition is fade.
+  cross_fade_transition_duration:
+    name: Cross-fade transition length
+    description: Seconds, used when Transition is cross-fade.
+  slide_transition_duration:
+    name: Slide transition length
+    description: Seconds, used when Transition is slide.
+  push_transition_duration:
+    name: Push transition length
+    description: Seconds, used when Transition is push.
   layout:
     name: Layout
   image_fit:
     name: Image fit
   image_effect:
     name: Image effect
+  optimize_images:
+    name: Optimise images
+    description: Resize photos to fit the screen before sending them. Faster on slow devices.
   show_progress_bar:
     name: Show progress bar
   show_time:
@@ -54,6 +69,9 @@ configuration:
     name: Show videos
   theme:
     name: Theme
+  font_size:
+    name: Font size
+    description: Percentage of the default text size, e.g. 120 for bigger text.
   background_blur:
     name: Blurred background
     description: Fill empty space around photos with a blurred copy.
