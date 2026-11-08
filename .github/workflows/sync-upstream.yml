@@ -47,6 +47,9 @@ jobs:
 
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          # Always keep this fork's README (upstream edits theirs often, which would conflict).
+          echo "README.md merge=ours" >> .git/info/attributes
+          git config merge.ours.driver true
           git fetch --no-tags https://github.com/damongolding/immich-kiosk.git "+refs/tags/$TAG:refs/tags/$TAG"
           git merge --no-edit -m "Merge upstream $TAG" "$TAG"
           sed -i -E "s/^version:.*/version: \"$UPSTREAM\"/" "$CONFIG"

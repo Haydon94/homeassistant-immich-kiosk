@@ -1,75 +1,63 @@
-# Immich Kiosk
+# Immich Kiosk for Home Assistant
 
-<div align="center">
-  <a href="https://github.com/damongolding/immich-kiosk">
-    <img src="/assets/logo.svg" width="240" height="auto" alt="Immich Kiosk windmill logo" />
-  </a>
-</div>
-<br />
-<br />
-<div align="center" style="display: flex; gap: 2rem;">
+<p align="center">
+  <img src="homeassistant/immich_kiosk/icon.png" width="160" alt="Immich Kiosk for Home Assistant icon" />
+</p>
 
-  [![Awesome](https://raw.githubusercontent.com/awesome-selfhosted/awesome-selfhosted/master/_static/awesome.png)](https://github.com/awesome-selfhosted/awesome-selfhosted#photo-and-video-galleries)
+A personal fork of [Immich Kiosk](https://github.com/damongolding/immich-kiosk)
+by [Damon Golding](https://github.com/damongolding), packaged as a Home Assistant
+OS add-on. Kiosk shows full-screen slideshows of your Immich photos on any
+browser, tablet or photo frame.
 
-  <a href="https://github.com/damongolding/immich-kiosk/releases/latest" target="_blank" style="underline: none !important">
-   <img alt="Kiosk latest release number" src="https://badgen.net/github/release/damongolding/immich-kiosk/stable">
-  </a>
+> [!NOTE]
+> This is an unofficial personal project, maintained for my own setup and not
+> affiliated with Immich Kiosk or Immich. Please don't report problems with this
+> add-on to them. Use it at your own risk.
 
-  <br />
+## Install in Home Assistant
 
-  <img alt="GitHub Actions Workflow Status" src="https://img.shields.io/github/actions/workflow/status/damongolding/immich-kiosk/go-test.yml?label=test&color=029356">
+[![Add repository to Home Assistant](https://my.home-assistant.io/badges/supervisor_add_addon_repository.svg)](https://my.home-assistant.io/redirect/supervisor_add_addon_repository/?repository_url=https%3A%2F%2Fgithub.com%2FHaydon94%2Fhomeassistant-immich-kiosk)
 
-  <img alt="GitHub Actions Workflow Status" src="https://img.shields.io/github/actions/workflow/status/damongolding/immich-kiosk/ghcr-release.yaml?color=029356">
+Or add it by hand:
 
-  <img alt="GitHub License" src="https://img.shields.io/github/license/damongolding/immich-kiosk?color=E6308A">
+1. In Home Assistant, go to **Settings → Add-ons → Add-on store → ⋮ →
+   Repositories** and add `https://github.com/Haydon94/homeassistant-immich-kiosk`.
+2. Install **Immich Kiosk**.
+3. In the **Configuration** tab, enter your Immich URL and API key, then start
+   it and open `http://<home-assistant-ip>:3000`.
 
-  <br />
-  <br />
+The add-on's **Documentation** tab covers the rest. It runs on amd64 and aarch64.
 
-  <a href="https://www.buymeacoffee.com/damongolding" target="_blank" style="underline: none !important">
-    <img src="https://cdn.buymeacoffee.com/buttons/v2/arial-yellow.png" alt="Buy Me A Coffee and support Kiosk" style="height: 46.88px !important;width: 167px !important;">
-  </a>
+## What this fork changes
 
-</div>
-<br />
-<br />
+Kiosk itself is unchanged and compiled from this fork's source. Everything
+added lives in [`homeassistant/immich_kiosk/`](homeassistant/immich_kiosk) and
+two workflows:
 
-## Links
-- [Documentation](http://docs.immichkiosk.app)
-- [Demo](http://demo.immichkiosk.app)
+- **Add-on definition**: a Configuration tab for the common Kiosk settings,
+  plus support for Kiosk's own `config.yaml` for everything else.
+- **Start-up script** ([`run.sh`](homeassistant/immich_kiosk/run.sh)): turns the
+  Configuration tab into Kiosk's `KIOSK_*` environment variables.
+- **Build** ([`ha-addon-image.yml`](.github/workflows/ha-addon-image.yml)):
+  compiles Kiosk and publishes the add-on image to
+  `ghcr.io/haydon94/immich-kiosk`.
+- **Automatic updates** ([`sync-upstream.yml`](.github/workflows/sync-upstream.yml)):
+  checks daily for a new Immich Kiosk release, merges it, and rebuilds, so Home
+  Assistant offers the update.
 
-## What is Immich Kiosk?
-Highly configurable slideshows for displaying [Immich][immich-github-url] assets on browsers and devices.
+## Made with AI help
 
-> [!IMPORTANT]
-> **This project is not affiliated with [Immich][immich-github-url]**
+The Home Assistant packaging (add-on files, start-up script, build and sync
+workflows, and this README) was written with help from Claude, an AI assistant.
+None of Immich Kiosk's own code was written or changed by AI.
 
-------
+## Kiosk documentation
 
-## Support
-If this project has been helpful to you and you wish to support me, you can do so with the button below 🙂.
+For what Kiosk can do and every configuration option, see the
+[upstream README](https://github.com/damongolding/immich-kiosk#readme).
 
-[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/damongolding)
+## Licence and credit
 
-------
-
-## Help
-
-If you have found a bug or have an issue you can submit it [here](https://github.com/damongolding/immich-kiosk/issues/new/choose).
-
-If you'd like to chat or need some informal help, feel free to find me in the Kiosk channel on the Immich discord server.
-
-<a href="https://discord.com/channels/979116623879368755/1293191523927851099">
-  <img style="height:32px!important" src="https://img.shields.io/badge/Immich%20Kiosk-Kiosk%20Discord?style=flat&logo=discord&logoColor=%23fff&labelColor=%235865F2&color=%235865F2" alt="Discord button">
-</a>
-
-------
-
-## AI usage
-Immich Kiosk is hand-curated without any direct AI assistance.
-
-We use CodeRabbit to review code changes, but it is mainly used to provide feedback (which is often ignored), catch bugs, and fix my many typos.
-
-<!-- LINKS & IMAGES -->
-[immich-github-url]: https://github.com/immich-app/immich
-[dietpi-url]: https://dietpi.com/docs/software/desktop/#chromium
+Immich Kiosk is licensed under [AGPL-3.0](LICENSE), and so is this fork. All
+credit for Kiosk goes to Damon Golding and its contributors. If you find Kiosk
+useful, consider [supporting the author](https://www.buymeacoffee.com/damongolding).
