@@ -4,7 +4,7 @@
 # The daily sync workflow sets this to each new upstream release. For fork-only
 # changes use a 4th number (e.g. 0.47.0.1) so HA sees it as newer.
 name: Immich Kiosk
-version: "0.47.0.2"
+version: "0.47.0.3"
 slug: immich_kiosk
 description: Slideshows of your Immich photos for browsers and displays
 url: https://github.com/Haydon94/homeassistant-immich-kiosk
